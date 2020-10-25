@@ -8,17 +8,30 @@ let badText = ''
 let goodText = ''
 let isTypingBadText = false
 let previousTextLength = 0;
+const leaders = []
 
 // calculate amount of words in text
 const wordAmount = autoText.split(' ').length
 
 // function to run when test has finished
 function endTest() {
+    // calculate elapsed time, wpm, accuracy, and score
     const elapsedTime = (end - start) / 1000
     const wpm = (60 * wordAmount) / elapsedTime
     const accuracy = (autoText.length - numberOfMistakes) / autoText.length * 100
+    const score = wpm * accuracy
+    // display user's stats
     $('.userRecentSpeed').text(wpm.toFixed(0))
     $('.userRecentAccuracy').text(accuracy.toFixed(0))
+    
+    // create obj with user's score
+    const userScore = {
+        wpm: wpm,
+        accuracy: accuracy,
+        score: score
+    }
+
+    // send user's obj back to server
 }
 
 // event listener when user presses a key
@@ -84,8 +97,8 @@ $('.userText').on('input', function(event) {
     previousTextLength = $('.userText').val().length
 })
 
-beginCountdown();
-
+// beginCountdown();
+beginTest()
 function beginCountdown() {
     let time = 5;
     $('.timer').text(time)
