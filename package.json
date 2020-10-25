@@ -15,8 +15,10 @@
     "express-handlebars": "^5.2.0",
     "express-session": "^1.17.1",
     "fs": "0.0.1-security",
+    "http": "0.0.1-security",
     "mysql2": "^2.2.5",
     "path": "^0.12.7",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "socket.io": "^2.3.0"
   }
 }

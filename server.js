@@ -3,11 +3,15 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 require('dotenv').config();
 
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+
 const db = require('./models');
 
 
-const app = express();
 const PORT = process.env.PORT || 8080;
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -35,8 +39,24 @@ require('./controllers/html/home-page-routes')(app);
 require('./controllers/api/authentication-api-routes')(app);
 
 
+// socket rouets to be moved later
+var users = [];
+var connections = [];
+
+io.sockets.on('connection', function(socket) {
+    connections.push(socket);
+    console.log('Connected: ' + connections.length + ' sockets connected')
+
+    // disconnect
+    socket.on('disconnect', function(data) {
+        connections.splice(connections.indexOf(socket), 1);
+        console.log('Disconnected: ' + connections.length + ' sockets disconnected')
+    })
+})
+
+
 db.sequelize.sync({ force: false }).then(function() {
-    app.listen(PORT, function() {
+    server.listen(PORT, function() {
         console.log('App listening on PORT: ' + PORT);
     });
 });
