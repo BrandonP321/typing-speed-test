@@ -26,8 +26,8 @@ module.exports = function(router) {
                     email: dbUser.email,
                     username: dbUser.username
                 }
-                // redirect to home page
-                res.redirect('/')
+                // send status 200
+                res.status(200).end();
             // assuming passwords don't match
             } else {
                 // destroy any existing session
@@ -42,7 +42,7 @@ module.exports = function(router) {
     router.post('/account/create', function(req, res) {
         // get user info
         const { email, password, username } = req.body
-
+        console.log(req.body)
         // check if user with same email already exists
         db.User.findOne({
             where: { email: email }
@@ -66,7 +66,8 @@ module.exports = function(router) {
                         email: newUser.dataValues.email,
                         username: newUser.dataValues.username,
                     }
-                    res.redirect('/')
+                    // status 200
+                    res.status(200).end();
                 })
             }
         })

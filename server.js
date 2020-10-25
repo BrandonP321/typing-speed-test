@@ -29,7 +29,9 @@ app.set('view engine', 'handlebars');
 
 
 // routes
-require('./controllers/html/login-routes')(app);
+require('./controllers/html/login-html-routes')(app);
+require('./controllers/html/home-page-routes')(app);
+require('./controllers/api/authentication-api-routes')(app);
 
 
 db.sequelize.sync({ force: false }).then(function() {

@@ -12,7 +12,7 @@ const newAccountDisplayBtn = $('.switchToNewAccountBtn')
 const newAccountForm = $('.createAccountForm')
 const newAccountHeading = $('.newAccountHeading')
 const newUsernameInput = $('#newUsernameInput')
-const newEmailInput = $('#newUsernameInput')
+const newEmailInput = $('#newEmailInput')
 const newPasswordInput = $('#newPassword')
 const newPasswordReEnter = $('#newPasswordReEnter')
 const loginDisplayBtn = $('.switchToLoginBtn')
@@ -59,7 +59,8 @@ loginForm.on('submit', function(event) {
             }
         }
     }).done(function(response) {
-        // should have redirected to home page
+        // redirect to home page
+        window.location.href = '/'
     })
 });
 
@@ -86,6 +87,7 @@ newAccountForm.on('submit', function(event) {
         }
     }).done(function(response) {
         // should be redirected to home page
+        window.location.href = '/'
     })
 })
 
