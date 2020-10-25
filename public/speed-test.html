@@ -15,14 +15,38 @@
     <link rel='stylesheet' href='assets/css/speed-test.css'>
     <title>Typing Test</title>
 </head>
-    <div class='paragraphContainer'>
-        <p class='paragraphText'>This is some random ass text</p>
+
+<body>
+
+    <main>
+        <div class='timerContainer'>
+            <p class='timerText'>Next Round Begins in: <span class='timer'></span></p>
+        </div>
+
+        <div class='paragraphContainer'>
+            <p class='paragraphText'>This is some random ass text</p>
+        </div>
+
+        <div class='userTextContainer'>
+            <textarea class='userText' disabled></textarea>
+        </div>
+    </main>
+
+    <!-- aside containing lobby players -->
+    <div class='lobbyContainer'>
+        <h2>Lobby</h2>
     </div>
 
-    <div class='userTextContainer'>
-        <textarea class='userText'></textarea>
+    <!-- aside containing user's info -->
+    <div class='userInfoContainer'>
+        <h2>Username <span class='userLobbyRank'>5th</span></h2>
+
+        <p>Recent Speed: <span class='userRecentSpeed'></span> WPM</p>
+        <p>Accuracy: <span class='userRecentAccuracy'></span>%</p>
+        <p>High Speed: <span class='userHighSpeed'></span> WPM</p>
+        <p>Accuracy: <span class='userHighAccuracy'></span>%</p>
     </div>
-<body>
+
     <!-- jQuery script -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstrap scripts -->

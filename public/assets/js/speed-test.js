@@ -1,6 +1,6 @@
 const acceptableChars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ".", "?", "!", "/", ",", "'", '"', ":", ";", 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '_', '=', '+', ' ']
 const autoText = 'This is some random ass text'
-const numberOfMistakes = 0;
+let numberOfMistakes = 0;
 let hasStarted = false
 let start;
 let end;
@@ -12,7 +12,9 @@ const wordAmount = autoText.split(' ').length
 function endTest() {
     const elapsedTime = (end - start) / 1000
     const wpm = (60 * wordAmount) / elapsedTime
-    alert("You finished with a wpm of: " + wpm)
+    const accuracy = (autoText.length - numberOfMistakes) / autoText.length * 100
+    $('.userRecentSpeed').text(wpm.toFixed(0))
+    $('.userRecentAccuracy').text(accuracy.toFixed(0))
 }
 
 // event listener when user presses a key
@@ -46,3 +48,24 @@ $('.userText').on('input', function(event) {
         numberOfMistakes += 1
     }
 })
+
+beginCountdown();
+
+function beginCountdown() {
+    let time = 5;
+    $('.timer').text(time)
+
+    let timeInterval = setInterval(function() {
+        time -= 1
+        $('.timer').text(time)
+        if (time === 0) {
+            clearInterval(timeInterval)
+            beginTest()
+        }
+    }, 1000)
+}
+
+function beginTest() {
+    $('.userText').prop('disabled', false)
+    $('.userText').focus()
+}
