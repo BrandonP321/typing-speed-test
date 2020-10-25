@@ -1,0 +1,30 @@
+.correctText {
+    background-color: green;
+}
+
+.incorrectText {
+    background-color: red;
+}
+
+.paragraphContainer {
+    background-color: salmon;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.paragraphText {
+    background-color: white;
+    display: inline-block;
+}
+
+.userText {
+    width: 100%;
+    height: 200px;
+
+}
+
+.userTextContainer {
+    width: 60%;
+    margin: 0 auto;
+}
+

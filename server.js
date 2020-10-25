@@ -30,6 +30,7 @@ app.set('view engine', 'handlebars');
 
 // routes
 require('./controllers/html/login-html-routes')(app);
+require('./controllers/html/speed-html-routes')(app);
 require('./controllers/html/home-page-routes')(app);
 require('./controllers/api/authentication-api-routes')(app);
 
