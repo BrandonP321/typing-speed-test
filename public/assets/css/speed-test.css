@@ -3,6 +3,16 @@ main {
     margin: 0 auto;
 }
 
+.clonedUserText {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    /* background-color: red; */
+    z-index: -1;
+}
+
 .correctText {
     background-color: green;
 }
@@ -41,11 +51,6 @@ main {
     text-align: end;
 }
 
-.userText {
-    width: 100%;
-    height: 200px;
-
-}
 
 .userInfoContainer {
     position: fixed;
@@ -61,7 +66,14 @@ main {
     float: right;
 }
 
+.userText {
+    width: 100%;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
 .userTextContainer {
     margin: 0 auto;
+    position: relative;
 }
 

@@ -4,6 +4,10 @@ let numberOfMistakes = 0;
 let hasStarted = false
 let start;
 let end;
+let badText = ''
+let goodText = ''
+let isTypingBadText = false
+let previousTextLength = 0;
 
 // calculate amount of words in text
 const wordAmount = autoText.split(' ').length
@@ -40,13 +44,42 @@ $('.userText').on('input', function(event) {
     const userChar = $('.userText').val()[charIndex]
     const actualChar = autoText[charIndex]
 
-    // if chars are the same, return to break function
-    if (userChar === actualChar) {
-        return
+    // if user has deleted a character
+    if ($('.userText').val().length < previousTextLength) {
+        console.log('delete')
+        // check if user is deleting from correct text
+        if (!isTypingBadText) {
+            goodText = goodText.slice(0, goodText.length - 1)
+        } else {
+            // if user is deleting incorrect text, cut off last character
+            badText = badText.slice(0, badText.length - 1)
+            // change displayed incorrect text on page
+            $('.incorrectText').text(badText)
+            // if there is now no bad text left, signal that user is now typing good text
+            if (badText.length === 0) {
+                isTypingBadText = false
+            }
+        }
+
+    // if chars are the same
+    }else if (userChar === actualChar && !isTypingBadText) {
+        // append user char to good text
+        goodText += userChar
+        // push good text to correct text span on cloned div behind textarea
+        $('.correctText').text(goodText)
     } else {
+        // signal that user is currently typing incorrect text
+        isTypingBadText = true
         // if not equal, increment number of mistakes
         numberOfMistakes += 1
+        // append new bad char to bad text
+        badText += userChar
+        // push bad text to incorrect text span on cloned div behind textarea
+        $('.incorrectText').text(badText)
     }
+    
+    // set length of current user text
+    previousTextLength = $('.userText').val().length
 })
 
 beginCountdown();
