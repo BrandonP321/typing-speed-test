@@ -77,3 +77,6 @@ main {
     position: relative;
 }
 
+.userText, .clonedUserText {
+    padding: 0;
+}

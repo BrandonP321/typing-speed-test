@@ -50,6 +50,8 @@ $('.userText').on('input', function(event) {
         // check if user is deleting from correct text
         if (!isTypingBadText) {
             goodText = goodText.slice(0, goodText.length - 1)
+            // change displayed correct text on page
+            $('.correctText').text(goodText)
         } else {
             // if user is deleting incorrect text, cut off last character
             badText = badText.slice(0, badText.length - 1)
