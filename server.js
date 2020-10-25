@@ -29,7 +29,7 @@ app.set('view engine', 'handlebars');
 
 
 // routes
-require('./controllers/')(app);
+require('./controllers/html/login-routes')(app);
 
 
 db.sequelize.sync({ force: false }).then(function() {
