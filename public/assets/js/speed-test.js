@@ -13,6 +13,8 @@ let previousTextLength = 0;
 const leaders = []
 let lobby;
 let hasLoggedIn = false
+let countHasStarted = false
+var timeInterval;
 
 // calculate amount of words in text
 const wordAmount = autoText.split(' ').length
@@ -93,12 +95,6 @@ socket.on('new message', function (data) {
 
 // event listener when user presses a key
 $('.userText').on('input', function (event) {
-    // if timer has not started yet, record start time
-    if (!hasStarted) {
-        hasStarted = true
-        start = Date.now();
-    }
-
     // store index of current char
     const charIndex = $('.userText').val().length - 1
 
@@ -165,13 +161,29 @@ $('.loginBtn').on('click', function (event) {
 })
 
 // liten for user clicking 'return' to login
-$('.usernameInput').on('keydown', function(event) {
+$('.usernameInput').on('keydown', function (event) {
     if (event.keyCode == 13) {
         // grab usrname entered by user
         const username = $('.usernameInput').val();
 
         // check if username is already taken
         socket.emit('new user', username)
+    }
+})
+
+// when user clicks start countdown button
+$('.startCountBtn').on('click', function () {
+    // if countdown has yet to start, send message to all connected clients to start countdown
+    if (!countHasStarted) {
+        socket.emit('start countdown')
+    }
+})
+
+// when user clicks btn to cancel countdown
+$('.cancelBtn').on('click', function () {
+    // if countdown has started, send message to stop countdown
+    if (countHasStarted) {
+        socket.emit('stop countdown')
     }
 })
 
@@ -188,13 +200,13 @@ socket.on('user created', function (data) {
 })
 
 // server response that username is taken
-socket.on('user taken', function(data) {
+socket.on('user taken', function (data) {
     // change error text to tell user their username is already taken
     $('.errorText').text("Username already being used")
 })
 
 // when more people connect to socket on server
-socket.on('user added', function(users) {
+socket.on('user added', function (users) {
     // add the new user to the lobby array
     lobby = users
     // make sure new user is added to page
@@ -202,26 +214,22 @@ socket.on('user added', function(users) {
 })
 
 // when people leave the site
-socket.on('user left', function(users) {
+socket.on('user left', function (users) {
     // set lobby array of users to new users array
     lobby = users
     // display all users
     displayUsers();
 })
 
-// when users leaves site, send message to all connected users
-window.onbeforeunload = function() {
-    socket.emit('left page', localStorage.getItem('username'))
-}
+// when a user has decided to start the countdown
+socket.on('begin countdown', function () {
+    countHasStarted = true;
 
-// beginCountdown();
-// beginTest()
-userLogin();
-function beginCountdown() {
-    let time = 5;
+    // create interval to countdown from 10
+    let time = 10;
     $('.timer').text(time)
 
-    let timeInterval = setInterval(function () {
+    timeInterval = setInterval(function () {
         time -= 1
         $('.timer').text(time)
         if (time === 0) {
@@ -229,11 +237,35 @@ function beginCountdown() {
             beginTest()
         }
     }, 1000)
+})
+
+// when a user has decided to cancel the countdown
+socket.on('cancel countdown', function () {
+    // clear interval that is counting down
+    clearInterval(timeInterval)
+    // set time text to blank
+    $('.timer').text('')
+    // let program know that countdown has not started
+    countHasStarted = false
+})
+
+// when users leaves site, send message to all connected users
+window.onbeforeunload = function () {
+    socket.emit('left page', localStorage.getItem('username'))
 }
 
+userLogin();
+
 function beginTest() {
+    // make start/stop countdown button disabled
+    $('.startCountBtn').prop('disabled', true)
+    $('.cancelBtn').prop('disabled', true)
+    // enable usertext textarea and set focus to it
     $('.userText').prop('disabled', false)
     $('.userText').focus()
+    // set hasStarted to true and recored start time
+    hasStarted = true
+    start = Date.now();
 }
 
 function userLogin() {

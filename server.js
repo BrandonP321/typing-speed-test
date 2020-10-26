@@ -72,6 +72,18 @@ io.sockets.on('connection', function(socket) {
         }
     })
 
+    // when user wants to start countdown
+    socket.on('start countdown', function(data) {
+        // tell all connected clients to begin countdown
+        io.sockets.emit('begin countdown')
+    })
+
+    // when user wants to cancel countdown
+    socket.on('stop countdown', function(data) {
+        // tell all connected clients to cancel countdown
+        io.sockets.emit('cancel countdown')
+    })
+
     // when user leaves site
     socket.on('left page', function(user) {
         // remove user from users arra
