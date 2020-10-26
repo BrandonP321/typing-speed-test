@@ -1,7 +1,7 @@
 var socket = io.connect();
 
 const acceptableChars = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ".", "?", "!", "/", ",", "'", '"', ":", ";", 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '-', '_', '=', '+', ' ']
-const autoText = 'This is some random ass text'
+let autoText;
 let numberOfMistakes = 0;
 let hasStarted = false
 let start;
@@ -15,9 +15,7 @@ let lobby;
 let hasLoggedIn = false
 let countHasStarted = false
 var timeInterval;
-
-// calculate amount of words in text
-const wordAmount = autoText.split(' ').length
+let wordAmount
 
 // function to run when test has finished
 function endTest() {
@@ -187,6 +185,14 @@ $('.cancelBtn').on('click', function () {
     }
 })
 
+// when user clicks btn to get new text
+$('.newTextBtn').on('click', function () {
+    // grab movie title from page
+    const movie = $('.movieInput').val();
+    // send message to server to get new text
+    socket.emit('get new text', movie)
+})
+
 // server response that user has been created
 socket.on('user created', function (data) {
     // store username in local storage
@@ -221,6 +227,17 @@ socket.on('user left', function (users) {
     displayUsers();
 })
 
+// when new text is generated
+socket.on('new movie', function (data) {
+    autoText = data
+    $('.paragraphText').text(autoText)
+})
+
+// when movie can't be found
+socket.on('movie not found', function (data) {
+    alert('movie could not be found')
+})
+
 // when a user has decided to start the countdown
 socket.on('begin countdown', function () {
     countHasStarted = true;
@@ -228,6 +245,8 @@ socket.on('begin countdown', function () {
     // create interval to countdown from 10
     let time = 10;
     $('.timer').text(time)
+    //disable new text btn
+    $('.newTextBtn').prop('disabled', true)
 
     timeInterval = setInterval(function () {
         time -= 1
@@ -247,6 +266,8 @@ socket.on('cancel countdown', function () {
     $('.timer').text('')
     // let program know that countdown has not started
     countHasStarted = false
+    // enable new text btn
+    $('.newTextBtn').prop('disabled', false)
 })
 
 // when users leaves site, send message to all connected users
@@ -257,7 +278,7 @@ window.onbeforeunload = function () {
 userLogin();
 
 function beginTest() {
-    // make start/stop countdown button disabled
+    // make buttons disabled
     $('.startCountBtn').prop('disabled', true)
     $('.cancelBtn').prop('disabled', true)
     // enable usertext textarea and set focus to it
@@ -266,6 +287,8 @@ function beginTest() {
     // set hasStarted to true and recored start time
     hasStarted = true
     start = Date.now();
+    // calculate amount of words in text
+    wordAmount = autoText.split(' ').length
 }
 
 function userLogin() {

@@ -28,6 +28,12 @@ main {
     top: 0;
     left: 0;
     padding: 1%;
+    color: white;
+}
+
+.movieInputContainer {
+    width: 30%;
+    margin-bottom: 1%;
 }
 
 .paragraphContainer {

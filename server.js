@@ -1,6 +1,7 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
+const axios = require('axios')
 require('dotenv').config();
 
 const app = express();
@@ -77,6 +78,25 @@ io.sockets.on('connection', function(socket) {
         // tell all connected clients to begin countdown
         io.sockets.emit('begin countdown')
     })
+
+    // when user wants to get new text
+    socket.on('get new text', function(movie) {
+        // remove spaces from movie
+        movie = movie.split(' ').join('+')
+        console.log(movie)
+        // make axios request to get a movie plot
+        axios.get("https://www.omdbapi.com/?plot=full&t=" + movie + "&apikey=9d2e2747").then(res => {
+            // if no movie found
+            if (res.data.Response === 'False') {
+                // send message to user that movie could not be found
+                socket.emit('movie not found')
+            } else {
+                // if movie is found, send message to all connected users
+                io.sockets.emit('new movie', res.data.Plot)
+            }
+        })
+    })
+
 
     // when user wants to cancel countdown
     socket.on('stop countdown', function(data) {
