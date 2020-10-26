@@ -11,6 +11,8 @@ let goodText = ''
 let isTypingBadText = false
 let previousTextLength = 0;
 const leaders = []
+let lobby;
+let hasLoggedIn = false
 
 // calculate amount of words in text
 const wordAmount = autoText.split(' ').length
@@ -25,7 +27,7 @@ function endTest() {
     // display user's stats
     $('.userRecentSpeed').text(wpm.toFixed(0))
     $('.userRecentAccuracy').text(accuracy.toFixed(0))
-    
+
     // create obj with user's score
     const userScore = {
         wpm: wpm.toFixed(0),
@@ -70,14 +72,27 @@ function addToLeaderboard(userObj) {
     })
 }
 
-socket.on('new message', function(data) {
+function displayUsers() {
+    // make sure that users list is empty
+    $('.users').empty();
+    // iterate through lobby array of users
+    lobby.forEach(user => {
+        // create a new list item with the user's name as it's text
+        const li = $('<li>')
+        li.text(user)
+        // append the list item to the page's lobby list
+        $('.users').append(li)
+    })
+}
+
+socket.on('new message', function (data) {
     console.log(data)
     // add received data to leaderboard
     addToLeaderboard(data)
 })
 
 // event listener when user presses a key
-$('.userText').on('input', function(event) {
+$('.userText').on('input', function (event) {
     // if timer has not started yet, record start time
     if (!hasStarted) {
         hasStarted = true
@@ -118,8 +133,8 @@ $('.userText').on('input', function(event) {
             }
         }
 
-    // if chars are the same
-    }else if (userChar === actualChar && !isTypingBadText) {
+        // if chars are the same
+    } else if (userChar === actualChar && !isTypingBadText) {
         // append user char to good text
         goodText += userChar
         // push good text to correct text span on cloned div behind textarea
@@ -134,18 +149,79 @@ $('.userText').on('input', function(event) {
         // push bad text to incorrect text span on cloned div behind textarea
         $('.incorrectText').text(badText)
     }
-    
+
     // set length of current user text
     previousTextLength = $('.userText').val().length
 })
 
+$('.loginBtn').on('click', function (event) {
+    // grab username entered by user
+    const username = $('.usernameInput').val();
+
+    // check if username is already taken
+    socket.emit('new user', username)
+
+
+})
+
+// liten for user clicking 'return' to login
+$('.usernameInput').on('keydown', function(event) {
+    if (event.keyCode == 13) {
+        // grab usrname entered by user
+        const username = $('.usernameInput').val();
+
+        // check if username is already taken
+        socket.emit('new user', username)
+    }
+})
+
+// server response that user has been created
+socket.on('user created', function (data) {
+    // store username in local storage
+    localStorage.setItem('username', data.newUser)
+    // hide login modal
+    $('#loginModal').modal('hide')
+    // set lobby array of users to all users from server
+    lobby = data.users
+    // display all users on page
+    displayUsers();
+})
+
+// server response that username is taken
+socket.on('user taken', function(data) {
+    // change error text to tell user their username is already taken
+    $('.errorText').text("Username already being used")
+})
+
+// when more people connect to socket on server
+socket.on('user added', function(users) {
+    // add the new user to the lobby array
+    lobby = users
+    // make sure new user is added to page
+    displayUsers();
+})
+
+// when people leave the site
+socket.on('user left', function(users) {
+    // set lobby array of users to new users array
+    lobby = users
+    // display all users
+    displayUsers();
+})
+
+// when users leaves site, send message to all connected users
+window.onbeforeunload = function() {
+    socket.emit('left page', localStorage.getItem('username'))
+}
+
 // beginCountdown();
-beginTest()
+// beginTest()
+userLogin();
 function beginCountdown() {
     let time = 5;
     $('.timer').text(time)
 
-    let timeInterval = setInterval(function() {
+    let timeInterval = setInterval(function () {
         time -= 1
         $('.timer').text(time)
         if (time === 0) {
@@ -158,4 +234,9 @@ function beginCountdown() {
 function beginTest() {
     $('.userText').prop('disabled', false)
     $('.userText').focus()
+}
+
+function userLogin() {
+    $('#loginModal').modal('show')
+    $('.usernameInput').focus();
 }

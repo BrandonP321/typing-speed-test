@@ -39,14 +39,37 @@
     <!-- aside containing lobby players -->
     <div class='lobbyContainer'>
         <h2>Lobby</h2>
+        <ul class='users'>
+            
+        </ul>
     </div>
 
     <!-- aside containing user's info -->
     <div class='leaderBoardContainer'>
         <h2>Leaderboard</h2>
         <ol class='leaders'>
-            
+
         </ol>
+    </div>
+
+    <!-- modal for user creating a username -->
+    <div class="modal fade" id="loginModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Enter a Username</h5>
+                </div>
+                <div class="modal-body">
+                    <input type='text' class='usernameInput form-control'>
+                    <p class='errorText'></p>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary loginBtn">Let's Type!</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- jQuery script -->

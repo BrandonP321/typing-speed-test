@@ -50,6 +50,35 @@ io.sockets.on('connection', function(socket) {
     socket.on('send message', function(data) {
         io.sockets.emit('new message', data)
     })
+    
+    // request from client to create a new user
+    socket.on('new user', function(data) {
+        // if username already exists in users array
+        if (users.includes(data)) {
+            // emit message that user is taken
+            socket.emit('user taken')
+        } else {
+            console.log('user created')
+            // otherwise add new user to users and emit message to login user
+            users.push(data)
+            console.log(data)
+            // send message just to client creating the user that user is created
+            socket.emit('user created', {
+                newUser: data,
+                users: users
+            })
+            // send a message to all connected users that a new user has been added
+            io.sockets.emit('user added', users)
+        }
+    })
+
+    // when user leaves site
+    socket.on('left page', function(user) {
+        // remove user from users arra
+        users.splice(users.indexOf(user), 1)
+        // tell all connected clients that a user has left
+        io.sockets.emit('user left', users)
+    })
 
     // disconnect
     socket.on('disconnect', function(data) {
