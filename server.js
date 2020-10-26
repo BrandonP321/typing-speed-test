@@ -47,6 +47,10 @@ io.sockets.on('connection', function(socket) {
     connections.push(socket);
     console.log('Connected: ' + connections.length + ' sockets connected')
 
+    socket.on('send message', function(data) {
+        io.sockets.emit('new message', data)
+    })
+
     // disconnect
     socket.on('disconnect', function(data) {
         connections.splice(connections.indexOf(socket), 1);

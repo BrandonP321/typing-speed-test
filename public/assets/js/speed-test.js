@@ -21,20 +21,60 @@ function endTest() {
     const elapsedTime = (end - start) / 1000
     const wpm = (60 * wordAmount) / elapsedTime
     const accuracy = (autoText.length - numberOfMistakes) / autoText.length * 100
-    const score = wpm * accuracy
+    const score = wpm * accuracy / 100
     // display user's stats
     $('.userRecentSpeed').text(wpm.toFixed(0))
     $('.userRecentAccuracy').text(accuracy.toFixed(0))
     
     // create obj with user's score
     const userScore = {
-        wpm: wpm,
-        accuracy: accuracy,
-        score: score
+        wpm: wpm.toFixed(0),
+        accuracy: accuracy.toFixed(0),
+        score: score.toFixed(0),
+        username: 'some username'
     }
 
     // send user's obj back to server
+    socket.emit('send message', userScore)
 }
+
+function addToLeaderboard(userObj) {
+    // grab values from obj
+    const { wpm, accuracy, score, username } = userObj;
+
+    // push new object to leaders array
+    leaders.push(userObj)
+
+    // sort array with new obj
+    leaders.sort((a, b) => {
+        // grab scores from a and b objects
+        const leaderA = a.score
+        const leaderB = b.score
+        // return difference to sort
+        return leaderB - leaderA
+    })
+
+    // clear leaderboard before appending
+    $('.leaders').empty();
+
+    // iterate through leaders and display on page
+    leaders.forEach(leader => {
+        const li = $('<li>')
+        const p = $('<p>')
+        p.text(leader.username)
+        const span = $('<span>')
+        span.text(leader.score)
+        p.append(span)
+        li.append(p)
+        $('.leaders').append(li)
+    })
+}
+
+socket.on('new message', function(data) {
+    console.log(data)
+    // add received data to leaderboard
+    addToLeaderboard(data)
+})
 
 // event listener when user presses a key
 $('.userText').on('input', function(event) {
