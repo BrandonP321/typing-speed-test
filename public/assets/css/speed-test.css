@@ -1,6 +1,8 @@
 main {
+    height: 50vh;
     width: 55%;
     margin: 0 auto;
+    position: relative;
 }
 
 .clonedUserText {
@@ -10,6 +12,7 @@ main {
     width: 100%;
     height: 200px;
     z-index: -1;
+    color: rgba(255, 255, 255, 0)
 }
 
 .correctText {
@@ -46,6 +49,15 @@ main {
     display: inline-block;
 }
 
+.startStopBtns {
+    width: 55%;
+    margin: 0 auto;
+}
+
+.textContainer {
+    position: relative;
+}
+
 .timer {
     font-size: 3rem;
     text-align: end;
@@ -80,8 +92,10 @@ main {
 }
 
 .userTextContainer {
-    margin: 0 auto;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%
 }
 
 .userText, .clonedUserText {

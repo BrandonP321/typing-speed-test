@@ -85,7 +85,7 @@ io.sockets.on('connection', function(socket) {
         movie = movie.split(' ').join('+')
         console.log(movie)
         // make axios request to get a movie plot
-        axios.get("https://www.omdbapi.com/?plot=full&t=" + movie + "&apikey=9d2e2747").then(res => {
+        axios.get("https://www.omdbapi.com/?plot=short&t=" + movie + "&apikey=9d2e2747").then(res => {
             // if no movie found
             if (res.data.Response === 'False') {
                 // send message to user that movie could not be found

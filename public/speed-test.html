@@ -23,28 +23,29 @@
             <p class='timerText'>Next Round Begins in: <span class='timer'></span></p>
         </div>
 
-        <div class='paragraphContainer'>
-            <p class='paragraphText'>Search for a movie to get some text</p>
-        </div>
+        <div class='textContainer'>
+            <div class='paragraphContainer'>
+                <p class='paragraphText'>Search for a movie to get some text</p>
+            </div>
 
-        <div class='userTextContainer'>
-            <textarea class='userText' disabled></textarea>
-            <div class='clonedUserText'>
-                <span class='correctText'></span><span class='incorrectText'></span>
+            <div class='userTextContainer'>
+                <textarea class='userText' disabled></textarea>
+                <div class='clonedUserText'>
+                    <span class='correctText'></span><span class='incorrectText'></span>
+                </div>
             </div>
         </div>
 
-        <div class='movieInputContainer'>
-            <input class='movieInput form-control' type='text' placeholder="Movie to get text from"> 
-        </div>
-
-        <div class='startStopBtns'>
-            <button class="btn btn-primary newTextBtn">Get New Text</button>
-            <button class="btn btn-primary startCountBtn">Start Countdown</button>
-            <button class="btn btn-primary cancelBtn">Cancel</button>
-        </div>
 
     </main>
+    <div class='startStopBtns'>
+        <div class='movieInputContainer'>
+            <input class='movieInput form-control' type='text' placeholder="Movie to get text from">
+        </div>
+        <button class="btn btn-primary newTextBtn">Get New Text</button>
+        <button class="btn btn-primary startCountBtn">Start Countdown</button>
+        <button class="btn btn-primary cancelBtn">Cancel</button>
+    </div>
 
     <!-- aside containing lobby players -->
     <div class='lobbyContainer'>
